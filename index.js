@@ -71,4 +71,4 @@ server.on('listening', () => {
   console.log(`UDP Hole Punching server listening on ${address.address}:${address.port}`);
 });
 
-server.bind(3000); // 伺服器監聽的端口
+server.bind(4000); // 伺服器監聽的端口
