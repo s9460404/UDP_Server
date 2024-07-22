@@ -1,5 +1,8 @@
 const dgram = require('dgram');
+const express = require('express');
+
 const server = dgram.createSocket('udp4');
+const app = express();
 
 const clients = {};
 const CLIENT_TIMEOUT = 5000; // 客戶端超時時間（毫秒）
@@ -71,4 +74,20 @@ server.on('listening', () => {
   console.log(`UDP Hole Punching server listening on ${address.address}:${address.port}`);
 });
 
-server.bind(4000); // 伺服器監聽的端口
+server.bind(3000); // 伺服器監聽的端口
+
+app.get('/', (req, res) => {
+    console.log(clients);
+    let clientList = '<h1>Registered Clients</h1><ul>';
+    Object.keys(clients).forEach(clientId => {
+      const { publicIp, publicPort } = clients[clientId];
+      clientList += `<li>Client ID: ${clientId} - Public IP: ${publicIp}, Public Port: ${publicPort}</li>`;
+    });
+    clientList += '</ul>';
+    res.send(clientList);
+});
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Express server running on port ${PORT}`);
+});
